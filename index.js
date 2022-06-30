@@ -222,9 +222,9 @@ const download = (options, callback, callback2 ) => {
                         length: serverFileSize,
                         lastModified: response.headers['last-modified']
                     };
-
-                    win.webContents.session.createInterruptedDownload(options);
-
+                    if (!!win && win.webContents && win.webContents.createInterruptedDownload) {
+                        win.webContents.session.createInterruptedDownload(options);
+                    }
                 } else {
 
                     console.log(filename + ' verified, no download needed');
@@ -246,7 +246,10 @@ const download = (options, callback, callback2 ) => {
                 onProgress: options.onProgress
             });
             console.log(filename + ' does not exist, download it now');
-            win.webContents.downloadURL(options.url);
+            if (!!win && win.webContents && win.webContents.downloadURL) {
+                win.webContents.downloadURL(options.url);
+            }
+            
         }
     });
     request.end();
