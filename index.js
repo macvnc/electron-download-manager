@@ -195,7 +195,9 @@ const download = (options, callback, callback2 ) => {
                 if (typeof callback2 === "function") {
                     callback2(newFilename, options);
                 }
-                win.webContents.downloadURL(options.url);
+                if (!!win && win.webContents && win.webContents.downloadURL) {
+                    win.webContents.downloadURL(options.url);
+                }
             } else {
                 queue.push({
                     url: url,
